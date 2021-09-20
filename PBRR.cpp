@@ -76,10 +76,13 @@ int main()
     while(completed != n) 
     {
       for(i=0;i<n;i++){
+      	
       	q.push(i);
       	visited[i]=true;
       	index=q.front();
-      	cout<<ps[index].bt_rem<<"-----";  
+      	if(ps[index].bt_rem>0){
+		 	cout<<ps[index].bt_rem<<"-----";  
+			} 
         q.pop();
       	
       if(ps[index].bt_rem>tq)
@@ -87,7 +90,7 @@ int main()
             ps[index].bt_rem -= tq;
             curr_time += tq;
       }
-      else 
+      else if(ps[index].bt_rem<=tq)
       {
             curr_time += ps[index].bt_rem;
             ps[index].bt_rem = 0;
@@ -96,7 +99,8 @@ int main()
       }
 
     
-}
+}//for
+
 sort(ps,ps+n,comparatorBT);
 continue;
 }//while
