@@ -73,14 +73,15 @@ int main()
    
   
     
-    while(completed != n) 
+    while(completed!=n) 
     {
       for(i=0;i<n;i++){
       	
       	q.push(i);
       	visited[i]=true;
       	index=q.front();
-      	if(ps[index].bt_rem>0){
+      	if(ps[index].bt_rem>0)
+		  {
 		 	cout<<ps[index].bt_rem<<"-----";  
 			} 
         q.pop();
@@ -89,34 +90,25 @@ int main()
       {    
             ps[index].bt_rem -= tq;
             curr_time += tq;
+            
       }
-      else if(ps[index].bt_rem<=tq)
+      else if(ps[index].bt_rem<=tq && ps[index].bt_rem>0 )
       {
             curr_time += ps[index].bt_rem;
             ps[index].bt_rem = 0;
             completed++;
-
+            
       }
 
     
 }//for
+
 
 sort(ps,ps+n,comparatorBT);
 continue;
 }//while
 	 
       
-      
-
-
-
-
-
-
-
-
-
-        
 
    return 0;
 }
