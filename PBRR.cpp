@@ -41,11 +41,10 @@ bool comparatorPID(struct process a,struct process b)
 int main()
 {
     
-    int n,index,i;
+    int n,index,i,context=0;
     queue<int> q;
-    bool visited[100]={false};
     int curr_time = 0;
-    int completed = 0,tq;
+    int completed= 0,tq;
     
     cout<<"Enter total number of processes: ";
     cin>>n;    
@@ -72,13 +71,10 @@ int main()
    sort(ps,ps+n,comparatorPrior); //pehle sort krlia process table ko
    
   
-    
-    while(completed!=n) 
-    {
+ 
       for(i=0;i<n;i++){
       	
       	q.push(i);
-      	visited[i]=true;
       	index=q.front();
       	if(ps[index].bt_rem>0)
 		  {
@@ -90,6 +86,7 @@ int main()
       {    
             ps[index].bt_rem -= tq;
             curr_time += tq;
+           
             
       }
       else if(ps[index].bt_rem<=tq && ps[index].bt_rem>0 )
@@ -97,19 +94,28 @@ int main()
             curr_time += ps[index].bt_rem;
             ps[index].bt_rem = 0;
             completed++;
-            
+          
       }
 
-    
 }//for
 
-
 sort(ps,ps+n,comparatorBT);
-continue;
-}//while
-	 
-      
 
+for(i=0;i<n;i++){
+	q.push(i);
+      	index=q.front();
+      	if(ps[index].bt_rem>0)
+		  {
+		 	cout<<ps[index].bt_rem<<"-----";  
+			} 
+        q.pop();
+        
+ curr_time+=ps[index].bt_rem;
+ ps[index].bt_rem=0;       
+       
+}//for
+
+cout<<endl<<"Current time:"<<curr_time;
    return 0;
 }
    
