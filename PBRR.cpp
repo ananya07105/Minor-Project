@@ -1,7 +1,7 @@
 #include<iostream>
-#include <algorithm> 
-#include <queue> 
-#include<climits>
+#include <algorithm> //for using the comparator function
+#include <queue> //for implementing queue DS
+
 
 using namespace std;
 
@@ -41,9 +41,9 @@ bool comparatorPID(struct process a,struct process b)
 int main()
 {
     
-    int n,index;
+    int n,index,i;
     queue<int> q;
-    bool visited[100]={false},is_first_process=true;
+    bool visited[100]={false};
     int curr_time = 0;
     int completed = 0,tq;
     
@@ -71,26 +71,18 @@ int main()
     
    sort(ps,ps+n,comparatorPrior); //pehle sort krlia process table ko
    
-
-    q.push(0);  
-    visited[0] = true;  
+  
     
     while(completed != n) 
     {
-      index = q.front();
-	  cout<<ps[index].bt_rem<<"-----";  
-      q.pop();
-      
-      
-      
-      if(ps[index].bt_rem == ps[index].bt) //we saw this process for the first time
-      {
-            ps[index].start_time = curr_time;
-            is_first_process = false;
-             
-      }
-	  
-	  if(ps[index].bt_rem>tq)
+      for(i=0;i<n;i++){
+      	q.push(i);
+      	visited[i]=true;
+      	index=q.front();
+      	cout<<ps[index].bt_rem<<"-----";  
+        q.pop();
+      	
+      if(ps[index].bt_rem>tq)
       {    
             ps[index].bt_rem -= tq;
             curr_time += tq;
@@ -102,66 +94,29 @@ int main()
             completed++;
 
       }
+
     
-
-for(int i = 1; i < n; i++) 
-      {
+}
+sort(ps,ps+n,comparatorBT);
+continue;
+}//while
+	 
       
-          if(ps[i].bt_rem > 0 && visited[i] == false) //agla process konsa enqueue hoga
-          { 
-            q.push(i);
-            visited[i] = true;
-          }
-      }
-
-
-
       
-    
-      if( ps[index].bt_rem> 0)//jo process dobara se enqueue hoye the
-          q.push(index);
-      
-          
-           
-      if(q.empty())
-      {
-      	
-      	  
-          for(int i = 0; i < n; i++)
-          {
-            if(ps[i].bt_rem > 0)
-            {
-              q.push(i);
-              visited[i] = true;
-              break;
-            }
-          }
-          
-      }      
+
+
+
+
+
+
+
+
+
         
-   } //while loop
+
    return 0;
 }
    
-***********************************************************************************************
-//	sort(ps,ps+n,comparatorBT); //burst time ke basis pe sort krne ke liye
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
