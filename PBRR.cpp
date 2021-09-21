@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//ye structure hai jo process table store krega
+//ye structure hai jo process table store krega(all info abt a process)
 struct process
 {
   int pid;
@@ -13,6 +13,7 @@ struct process
   int prior;
   int start_time;
   int bt_rem;
+  int tat,wt;
 }ps[100];
 
 //for sorting on the basis of priority
@@ -30,7 +31,7 @@ bool comparatorBT(struct process a,struct process b)
    return x < y;
 }
 
-
+//process id's ko simultaneously sort krne k liye
 bool comparatorPID(struct process a,struct process b)
 {
    int x =a.pid;
@@ -41,10 +42,11 @@ bool comparatorPID(struct process a,struct process b)
 int main()
 {
     
-    int n,index,i,context=0;
-    queue<int> q;
-    int curr_time = 0;
-    int completed= 0,tq;
+    int n,index,i,context=-1,tq;
+    queue<int> q; //ready queue
+    int curr_time = 0; //to track the current time in the gantt chart
+    int completed= 0; //to check if the process is completed or not
+    float sum_tat=0,sum_wt=0;
     
     cout<<"Enter total number of processes: ";
     cin>>n;    
@@ -66,21 +68,30 @@ int main()
     
     cout<<"\nEnter time quantum: ";
     cin>>tq;
+    cout<<endl;
     
     
-   sort(ps,ps+n,comparatorPrior); //pehle sort krlia process table ko
+   sort(ps,ps+n,comparatorPrior); //pehle sort krlia process table ko on the basis of the priorities assigned by the user
    
   
  
-      for(i=0;i<n;i++){
+for(i=0;i<n;i++){
+      	//pehle process ko push kia in the ready queue
       	
       	q.push(i);
       	index=q.front();
+      	
+      	//if it has some burst time remaining
+      	
       	if(ps[index].bt_rem>0)
 		  {
 		 	cout<<ps[index].bt_rem<<"-----";  
 			} 
+		
+		// process ko ready queue se nikalkr execute kia
         q.pop();
+        
+        //two cases arise: either bt<tq or bt>=tq
       	
       if(ps[index].bt_rem>tq)
       {    
@@ -93,29 +104,53 @@ int main()
       {
             curr_time += ps[index].bt_rem;
             ps[index].bt_rem = 0;
-            completed++;
+            completed++; //ye process complete hogya and ab ise dobara queue mei daalne ki koi need nhi hai
+            
+            ps[index].tat = curr_time; //turnarnd time
+            ps[index].wt = ps[index].tat - ps[index].bt; //waiting time
+            sum_tat+=ps[index].tat;
+            sum_wt+=ps[index].wt;
           
       }
-
+      
+//context switching occurs
+context++;
 }//for
 
+//sorting on the basis of burst time
 sort(ps,ps+n,comparatorBT);
+
+//2nd iteration occurs
 
 for(i=0;i<n;i++){
 	q.push(i);
-      	index=q.front();
-      	if(ps[index].bt_rem>0)
+	index=q.front();
+    if(ps[index].bt_rem>0)
 		  {
 		 	cout<<ps[index].bt_rem<<"-----";  
+		 	context++;
+		 	curr_time+=ps[index].bt_rem;
+  ps[index].tat = curr_time;
+  sum_tat+=ps[index].tat;
+  
+  
+ps[index].wt = ps[index].tat - ps[index].bt; //waiting time
+  sum_wt+=ps[index].wt;
+  
+ ps[index].bt_rem=0;  
+		 	
 			} 
         q.pop();
-        
- curr_time+=ps[index].bt_rem;
- ps[index].bt_rem=0;       
-       
+           
+    
+      
 }//for
 
-cout<<endl<<"Current time:"<<curr_time;
+//displaying performance metrics
+
+cout<<endl<<"Context Switches:"<<context;
+cout<<endl<<"Average Turnaround Time:"<<sum_tat/n;
+cout<<endl<<"Average Waiting Time:"<<sum_wt/n;
    return 0;
 }
    
