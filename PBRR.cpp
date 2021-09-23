@@ -85,7 +85,7 @@ for(i=0;i<n;i++){
       	
       	if(ps[index].bt_rem>0)
 		  {
-		 	cout<<ps[index].bt_rem<<"-----";  
+		 	cout<<"P"<<(ps[i].pid+1)<<"-----"; 
 			} 
 		
 		// process ko ready queue se nikalkr execute kia
@@ -127,7 +127,7 @@ for(i=0;i<n;i++){
 	index=q.front();
     if(ps[index].bt_rem>0)
 		  {
-		 	cout<<ps[index].bt_rem<<"-----";  
+		 	cout<<"P"<<(ps[i].pid+1)<<"-----";  
 		 	context++;
 		 	curr_time+=ps[index].bt_rem;
   ps[index].tat = curr_time;
