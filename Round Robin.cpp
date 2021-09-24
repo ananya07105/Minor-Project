@@ -38,38 +38,43 @@ int main(){
 		for(int i=0;i<n;i++){
 			if(ps[i].rem_bt>0){
 				q.push(i);
-				if(ps[i].rem_bt-tq==0){
-					completed++;
-					ps[i].tat = curr_time; //turnarnd time
-            		ps[i].wt = ps[i].tat - ps[i].bt; //waiting time
-            		sum_tat+=ps[i].tat;
-            		sum_wt+=ps[i].wt;
-				}
-				if(ps[i].rem_bt-tq>=0){
-					cout<<"P"<<i<<"----";
+				cout<<"P"<<i+1<<"----";
+				
+					
+			
+				if(ps[i].rem_bt>tq){
+					
 					curr_time+=tq;
 					ps[i].rem_bt-=tq;
+					q.pop();
 					context++;
+				
 				}
-				else if(ps[i].rem_bt-tq<0 && ps[i].rem_bt>0){
-					cout<<"P"<<i<<"----";
-					curr_time+=tq;
+				else if(ps[i].rem_bt<tq || ps[i].rem_bt==tq){
+					
+					curr_time+=ps[i].rem_bt;
 					ps[i].rem_bt=0;  // indicated that process has been finished
-					context++;
 					completed++;  // number of finished processes5
+					
+					q.pop();
+					
 					ps[i].tat = curr_time; //turnarnd time
             		ps[i].wt = ps[i].tat - ps[i].bt; //waiting time
             		sum_tat+=ps[i].tat;
             		sum_wt+=ps[i].wt;
+            		context++;
 				}
 			}
-			q.pop();
+		
+			
 		}
 	}
 	
 	cout<<endl;
 	cout<<endl;
 	cout<<"Context Switches: "<<context<<endl;
-	cout<<"Average Waiting Time:"<<sum_wt/5<<" ms"<<endl;
-	cout<<"Average Turn Around Time Time:"<<sum_tat/5<<" ms";
+	cout<<"Average Waiting Time:"<<sum_wt/n<<" ms"<<endl;
+	cout<<"Average Turn Around Time Time:"<<sum_tat/n<<" ms";
+	
+	return 0;
 }
