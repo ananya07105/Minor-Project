@@ -71,8 +71,8 @@ int main(){
 	}
 	
 	
-	cout<<endl<<"Context Switches: "<<context<<endl;
-	cout<<endl<<"Average Waiting Time:"<<sum_wt/n<<" ms"<<endl;
+	cout<<endl<<"Context Switches: "<<context;
+	cout<<endl<<"Average Waiting Time:"<<sum_wt/n<<" ms";
 	cout<<endl<<"Average Turn Around Time Time:"<<sum_tat/n<<" ms";
 	
 	return 0;
