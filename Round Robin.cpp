@@ -70,11 +70,10 @@ int main(){
 		}
 	}
 	
-	cout<<endl;
-	cout<<endl;
-	cout<<"Context Switches: "<<context<<endl;
-	cout<<"Average Waiting Time:"<<sum_wt/n<<" ms"<<endl;
-	cout<<"Average Turn Around Time Time:"<<sum_tat/n<<" ms";
+	
+	cout<<endl<<"Context Switches: "<<context<<endl;
+	cout<<endl<<"Average Waiting Time:"<<sum_wt/n<<" ms"<<endl;
+	cout<<endl<<"Average Turn Around Time Time:"<<sum_tat/n<<" ms";
 	
 	return 0;
 }
