@@ -1,89 +1,82 @@
 #include <iostream>
 #include <algorithm>
+#include <queue>
 using namespace std;
 
 struct process
 {
-	int bt,pr,ct,ta,wt;
-	string pro_id;
+	int pr;
+	int bt;
+	int rem_bt;
+	int tat,wt;
+int pid;
 
-			  /*
-	bt = Burst time,
-	ct = Completion time,
-	ta = Turn around time,
-	wt = Waiting time
-	*/
+};
 
-}process;
-
-bool compare(process a,process b)
+bool compare(struct process a,struct process b)
 {
-	return a.bt<b.bt;
-		 /* This schedule will always return TRUE
-if above condition comes*/
+	return a.pr<b.pr;
 
 }
 
-bool compare2(process a,process b)
-{
-	return a.pr>b.pr;
-	 /* This schedule will always return TRUE
-if above condition comes*/
 
+bool comparePID(struct process x,struct process y)
+{
+   return x.pid < y.pid;
 }
+
 
 int main()
 {
-	process pro[10];
+   process pro[100];
 	int n,i,j;
+	queue<int>q;
+	int curr_time=0;
+	int completed=0;
+	float sum_tat=0,sum_wat=0;
 	cout<<"Enter the number of process:";
 	cin>>n;
-	cout<<"Enter the process id: ";
 	cout<<endl;
-    cout<<"Enter the burst time:";
-    cout<<endl;
-    cout<<"Enter the priority :";
-    cout<<endl;
-	for(i=0;i<n;i++)
-	{
-		cin>>pro[i].pro_id;
-		cin>>pro[i].bt;
-		cin>>pro[i].pr;
+	for(i=0;i<n;i++){
+            cout<<"Enter Processes"<<i<<"Burst Time:";
+    cin>>pro[i].bt;
+    pro[i].rem_bt=pro[i].bt;
+    pro[i].pid=i+1;
+    }
+
+
+for(i=0;i<n;i++){
+    cout<<"Enter Processes"<<i<<"Priority:";
+    cin>>pro[i].pr;
+    }
+
+
+
+sort(pro,pro+n,compare);
+
+
+while(completed!=n){
+            for(i=0;i<n;i++){
+                if(pro[i].rem_bt>0){
+                    q.push(i);
+                    cout<<pro[i].pid<<"-----";
+                }
+                curr_time+=pro[i].rem_bt;
+                pro[i].rem_bt=0;
+                completed++;
+                q.pop();
+                
+                
+                pro[i].tat=curr_time;
+                pro[i].wt=pro[i].tat-pro[i].bt;
+                sum_tat+=pro[i].tat;
+                sum_wat+=pro[i].wt;
+            }
+
 	}
 
-	sort(pro,pro+n,compare);
+	cout<<endl<<"Average waiting time:"<<sum_wat/n<<"ms";
+	cout<<endl<<"Average turn around time:"<<sum_tat/n<<"ms";
 
-	 /*sort is a predefined function  defined in algorithm.h header file,
-it will sort the schedules according to their burst time*/
-
-	pro[0].ct=pro[0].bt;
-	pro[0].ta=pro[0].ct-pro[0].bt;
-	pro[0].wt=pro[0].ta-pro[0].bt;
-	i=1;
-
-	while(i<n-1)
-	{
-
-		for(j=i;j<n;j++)
-		{
-			if(pro[j].bt>pro[i-1].ct)
-			break;
-		}
-		sort(pro+i,pro+i+(j-i),compare2);
-		pro[i].ct=pro[i-1].ct+pro[i].bt;
-		pro[i].ta=pro[i].ct-pro[i].bt;
-		pro[i].wt=pro[i].ta-pro[i].bt;
-		i++;
-		}
-		pro[i].ct=pro[i-1].ct+pro[i].bt;
-		pro[i].ta=pro[i].ct-pro[i].bt;
-		pro[i].wt=pro[i].ta-pro[i].bt;
-
-	for(i=0;i<n;i++)
-	{
-		//displaying all the values
-		cout<<pro[i].pro_id<<"\t"<<pro[i].bt<<"\t"<<pro[i].ct<<"\t"<<pro[i].ta<<"\t"<<pro[i].wt<<"\t"<<pro[i].pr;
-		cout<<endl;
-	}
 	return 0;
 }
